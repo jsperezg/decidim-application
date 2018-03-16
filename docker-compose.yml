@@ -9,12 +9,14 @@ services:
       - RAILS_ENV=production
       - REDIS_URL=redis://redis:6379
       - RAILS_SERVE_STATIC_FILES=1
+      - MEMCACHEDCLOUD_SERVERS=memcached
       # - RAILS_FORCE_SSL=1
     ports:
       - 3000:3000
     links:
       - pg
       - redis
+      - memcached
     entrypoint: ["/code/bin/entrypoint.sh"]
     command: bundle exec rails s -b 0.0.0.0
   worker:
@@ -36,6 +38,11 @@ services:
     image: redis
     volumes:
       - redis-data:/data
+  memcached:
+    image: memcached:alpine
+    expose:
+      - "11211"
+    command: memcached -m 64
 volumes:
   pg-data: {}
   redis-data: {}

@@ -15,7 +15,7 @@ The first thing that you need is a Decidim application. You can create a new one
 [Metadecidim](https://github.com/decidim/metadecidim) instead. [Metadecidim](https://github.com/decidim/metadecidim)
 comes with Docker files for the web and worker container.
 
-If you finally decide to go on your own and create a fresh decidim application you should check this files as well because you will need them during the upcoming sections.
+If you finally decide to go on your own and create a fresh decidim application you should check these files as well because you will need them during the upcoming sections.
 
 ## Build de Docker images.
 
@@ -57,12 +57,14 @@ services:
       - RAILS_ENV=production
       - REDIS_URL=redis://redis:6379
       - RAILS_SERVE_STATIC_FILES=1
+      - MEMCACHEDCLOUD_SERVERS=memcached
       # - RAILS_FORCE_SSL=1
     ports:
       - 3000:3000
     links:
       - pg
       - redis
+      - memcached
     entrypoint: ["/code/bin/entrypoint.sh"]
     command: bundle exec rails s -b 0.0.0.0
   worker:
@@ -84,6 +86,11 @@ services:
     image: redis
     volumes:
       - redis-data:/data
+  memcached:
+    image: memcached:alpine
+    expose:
+      - "11211"
+    command: memcached -m 64
 volumes:
   pg-data: {}
   redis-data: {}
