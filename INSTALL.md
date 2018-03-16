@@ -56,6 +56,8 @@ services:
       - DATABASE_USERNAME=postgres
       - RAILS_ENV=production
       - REDIS_URL=redis://redis:6379
+      - RAILS_SERVE_STATIC_FILES=1
+      # - RAILS_FORCE_SSL=1
     ports:
       - 3000:3000
     links:
@@ -70,8 +72,6 @@ services:
       - DATABASE_USERNAME=postgres
       - RAILS_ENV=production
       - REDIS_URL=redis://redis:6379
-      - RAILS_SERVE_STATIC_FILES=1
-      # - RAILS_FORCE_SSL=1
     links:
       - pg
       - redis
@@ -87,7 +87,6 @@ services:
 volumes:
   pg-data: {}
   redis-data: {}
-
 ```
 
 Notice that the docker images for worker and decidim services point to the images that we've created during the previous steps.
